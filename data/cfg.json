@@ -1,0 +1,14 @@
+{
+  "plot": "choropleth_china",
+  "file": "data/china_values.csv",
+  "level": 1,
+  "key_col": "NAME_1",
+  "value_col": "value",
+  "scheme": "equal",
+  "k": 6,
+  "cmap": "Reds",
+  "title": "China L1 Choropleth (cfg)",
+  "label_top_n": 6,
+  "match_screen": true,
+  "tight": false
+}

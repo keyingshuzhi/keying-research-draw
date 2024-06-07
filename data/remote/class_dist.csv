@@ -1,0 +1,7 @@
+class,count,group
+Forest,170,RegionA
+Water,81,RegionA
+Soil,123,RegionA
+Forest,156,RegionB
+Water,95,RegionB
+Soil,175,RegionB

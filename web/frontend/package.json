@@ -1,0 +1,32 @@
+{
+  "name": "research-draw-web",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:version": "node ./scripts/sync-version.mjs",
+    "predev": "npm run sync:version",
+    "prelint": "npm run sync:version",
+    "pretest": "npm run sync:version",
+    "prebuild": "npm run sync:version",
+    "prepreview": "npm run sync:version",
+    "dev": "vite",
+    "lint": "eslint src --ext .js,.vue",
+    "lint:fix": "eslint src --ext .js,.vue --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "vite build",
+    "preview": "vite preview --port 5173"
+  },
+  "dependencies": {
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^9.32.0",
+    "vitest": "^2.1.9",
+    "vite": "^5.4.19"
+  }
+}
