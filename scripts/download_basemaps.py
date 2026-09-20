@@ -9,12 +9,12 @@ download_basemaps.py — 下载离线底图 + 可选自动“港澳提取”（�
   - 自动提取：从 GADM-CHN L1 中提取 [Hong Kong / Macao]；从 NE admin0 中提取 [HKG/MAC]
 
 用法：
-  python scripts/download_basemaps.py --dir data/geo
-  python scripts/download_basemaps.py --dir data/geo --only ne
-  python scripts/download_basemaps.py --dir data/geo --only gadm
-  python scripts/download_basemaps.py --dir data/geo --skip-gadm
+  uv run python scripts/download_basemaps.py --dir data/geo
+  uv run python scripts/download_basemaps.py --dir data/geo --only ne
+  uv run python scripts/download_basemaps.py --dir data/geo --only gadm
+  uv run python scripts/download_basemaps.py --dir data/geo --skip-gadm
   # 关闭提取：
-  python scripts/download_basemaps.py --dir data/geo --no-extract-hkmo
+  uv run python scripts/download_basemaps.py --dir data/geo --no-extract-hkmo
 """
 
 from __future__ import annotations
@@ -352,7 +352,7 @@ def run(
             except Exception as e:
                 print(f"  ⚠️ NE 港澳提取失败：{e}")
         else:
-            print("\nℹ️ 未安装 geopandas，跳过港澳提取。需要时请：pip install geopandas shapely fiona pyproj rtree")
+            print("\nℹ️ 未安装 geopandas，跳过港澳提取。需要时请：uv sync --extra maps")
 
     print("\n🎉 全部完成！")
     print("📌 说明：")

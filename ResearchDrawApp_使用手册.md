@@ -1,16 +1,22 @@
-# ResearchDrawApp 使用手册（v0.1.1）
+# ResearchDrawApp 使用手册（v0.1.2）
 
 本手册覆盖当前项目的 CLI 与 Web 端能力，内容与仓库最新代码同步。
 
-版本治理（v0.1.1）：
+版本治理（v0.1.2）：
 
 - 单一版本源：项目根目录 `VERSION`
 - CLI / Web 后端：通过 `src/version.py` 自动读取并注入
 - 前端 package 版本：通过 `web/frontend/scripts/sync-version.mjs` 自动同步到 `package.json` 与 `package-lock.json`
 
+环境治理：
+
+- Python 固定为 `3.13.15`
+- 使用 `uv` 管理虚拟环境、依赖和锁文件
+- `.python-version` 固定解释器版本，`uv.lock` 固定依赖解析结果
+
 ## 1. 工具概览
 
-- CLI 入口：`python -m src.main` 或 `research-draw`
+- CLI 入口：`uv run python -m src.main` 或 `uv run research-draw`
 - Web 入口：`web/backend/app.py` + `web/frontend/`
 - 支持图型：
   - 统计二维：`box` / `violin` / `scatter` / `volcano` / `forest`
@@ -23,11 +29,11 @@
 推荐 Python `3.10+`。
 
 ```bash
-# 基础安装
-python -m pip install -e .
+# 安装/同步基础环境
+uv sync
 
 # 常用组合（Web + 数据 + ML + 地图）
-python -m pip install -e ".[web,data,ml,maps,raster]"
+uv sync --extra web --extra data --extra ml --extra maps --extra raster
 ```
 
 说明：
@@ -40,36 +46,36 @@ python -m pip install -e ".[web,data,ml,maps,raster]"
 ### 3.1 查看帮助
 
 ```bash
-python -m src.main -h
-python -m src.main --help-examples
+uv run python -m src.main -h
+uv run python -m src.main --help-examples
 ```
 
 ### 3.2 Demo 示例
 
 ```bash
-python -m src.main --mode demo --plot box --title "箱线图演示"
-python -m src.main --mode demo --plot confusion --title "Confusion Demo"
-python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
-python -m src.main --mode demo --plot quiver3d --title "3D Vector Field"
-python -m src.main --mode demo --plot choropleth_world --title "World Choropleth"
+uv run python -m src.main --mode demo --plot box --title "箱线图演示"
+uv run python -m src.main --mode demo --plot confusion --title "Confusion Demo"
+uv run python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
+uv run python -m src.main --mode demo --plot quiver3d --title "3D Vector Field"
+uv run python -m src.main --mode demo --plot choropleth_world --title "World Choropleth"
 ```
 
 ### 3.3 文件模式示例
 
 ```bash
-python -m src.main --mode file --plot scatter --file data/demo_scatter.csv --x-col x --y-col y
-python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
-python -m src.main --mode file --plot upset --file data/biomed/upset.csv
-python -m src.main --mode file --plot confusion --file data/remote/confusion.csv
-python -m src.main --mode file --plot choropleth_china --file data/china_values.csv --level 1 --key-col NAME_1 --value-col value
+uv run python -m src.main --mode file --plot scatter --file data/demo_scatter.csv --x-col x --y-col y
+uv run python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
+uv run python -m src.main --mode file --plot upset --file data/biomed/upset.csv
+uv run python -m src.main --mode file --plot confusion --file data/remote/confusion.csv
+uv run python -m src.main --mode file --plot choropleth_china --file data/china_values.csv --level 1 --key-col NAME_1 --value-col value
 ```
 
 ### 3.4 自定义模式示例
 
 ```bash
-python -m src.main --mode custom --plot box --group "Ctrl:1,2,3" --group "A:2,3,4"
-python -m src.main --mode custom --plot scatter --x "1,2,3,4" --y "1.1,2.4,2.8,4.2" --ci 0.95
-python -m src.main --mode custom --plot volcano --log2fc "0.5,1.2,-1.1" --pvals "0.05,0.01,0.2"
+uv run python -m src.main --mode custom --plot box --group "Ctrl:1,2,3" --group "A:2,3,4"
+uv run python -m src.main --mode custom --plot scatter --x "1,2,3,4" --y "1.1,2.4,2.8,4.2" --ci 0.95
+uv run python -m src.main --mode custom --plot volcano --log2fc "0.5,1.2,-1.1" --pvals "0.05,0.01,0.2"
 ```
 
 ## 4. Web 端使用
@@ -78,7 +84,7 @@ python -m src.main --mode custom --plot volcano --log2fc "0.5,1.2,-1.1" --pvals 
 
 ```bash
 # 后端（项目根目录）
-python -m uvicorn web.backend.app:app --reload --host 127.0.0.1 --port 8000
+uv run uvicorn web.backend.app:app --reload --host 127.0.0.1 --port 8000
 
 # 前端
 cd web/frontend
@@ -147,7 +153,7 @@ npm run dev
 可通过 `--config` 读取配置：
 
 ```bash
-python -m src.main --config path/to/config.yaml
+uv run python -m src.main --config path/to/config.yaml
 ```
 
 规则：
@@ -198,10 +204,10 @@ python -m src.main --config path/to/config.yaml
 ### 8.1 后端质量检查
 
 ```bash
-python3 -m pip install -e ".[test]"
-python3 -m ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
-python3 -m mypy
-MPLBACKEND=Agg PLOT_BACKEND=Agg HEADLESS=1 python3 -m pytest -q
+uv sync --extra test
+uv run ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
+uv run mypy
+MPLBACKEND=Agg PLOT_BACKEND=Agg HEADLESS=1 uv run pytest -q
 ```
 
 说明：
@@ -237,10 +243,10 @@ npm run build
 ### 8.4 本地一键回归建议
 
 ```bash
-python3 -m pip install -e ".[test]"
-python3 -m ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
-python3 -m mypy
-MPLBACKEND=Agg PLOT_BACKEND=Agg HEADLESS=1 python3 -m pytest -q
+uv sync --extra test
+uv run ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
+uv run mypy
+MPLBACKEND=Agg PLOT_BACKEND=Agg HEADLESS=1 uv run pytest -q
 cd web/frontend && npm run lint && npm run test && npm run build
 ```
 

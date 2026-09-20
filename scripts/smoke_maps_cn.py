@@ -127,7 +127,7 @@ def make_demo_world_tif(out_tif: Path):
         import rasterio
         from rasterio.transform import from_bounds
     except Exception:
-        print("[SKIP] 未安装 rasterio，跳过生成 demo_world.tif（pip install rasterio）")
+        print("[SKIP] 未安装 rasterio，跳过生成 demo_world.tif（uv sync --extra raster）")
         return
     out_tif.parent.mkdir(parents=True, exist_ok=True)
     width, height = 720, 360
@@ -150,7 +150,7 @@ def make_demo_china_tif(out_tif: Path):
         import rasterio
         from rasterio.transform import from_bounds
     except Exception:
-        print("[SKIP] 未安装 rasterio，跳过生成 demo_china.tif（pip install rasterio）")
+        print("[SKIP] 未安装 rasterio，跳过生成 demo_china.tif（uv sync --extra raster）")
         return
     out_tif.parent.mkdir(parents=True, exist_ok=True)
     # 大约中国本土范围

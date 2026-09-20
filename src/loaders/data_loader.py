@@ -143,7 +143,7 @@ def read_points_from_table(file: Path, lon_col: str, lat_col: str):
                 package="geopandas",
                 feature="地图点位表格读取",
                 recommended_extra="maps",
-                fallback_pip="pip install geopandas shapely pandas",
+                fallback_pip="uv add geopandas shapely pandas",
             )
         ) from e
 
@@ -163,4 +163,3 @@ def read_points_from_table(file: Path, lon_col: str, lat_col: str):
         geometry=gpd.points_from_xy(df[lon_col].astype(float), df[lat_col].astype(float)),
         crs="EPSG:4326",
     )
-

@@ -437,7 +437,7 @@ class Scatter3DPlotter:
                         package="umap-learn",
                         feature="embedding3d 的 UMAP 降维",
                         recommended_extra="ml",
-                        fallback_pip="pip install umap-learn scikit-learn",
+                        fallback_pip="uv add umap-learn scikit-learn",
                     )
                 ) from e
             emb = umap.UMAP(n_components=3, random_state=42).fit_transform(X)
@@ -557,7 +557,7 @@ class Scatter3DPlotter:
                     package="scikit-image",
                     feature="isosurface3d（Marching Cubes）",
                     recommended_extra="ml",
-                    fallback_pip="pip install scikit-image",
+                        fallback_pip="uv add scikit-image",
                 )
             ) from e
 
@@ -729,4 +729,3 @@ def isosurface3d(*args, **kwargs):
 
 def slice3d(*args, **kwargs):
     return _get_default_plotter().slice3d(*args, **kwargs)
-

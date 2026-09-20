@@ -7,7 +7,7 @@ name = "research-draw"
 dynamic = ["version"]
 description = "Research plotting CLI for scientific figures and offline maps"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "==3.13.15"
 authors = [{ name = "Keying Digital Intelligence" }]
 dependencies = [
   "numpy>=1.23,<3.0",
@@ -79,6 +79,18 @@ all = [
   "types-requests>=2.32.0",
 ]
 
+[dependency-groups]
+dev = [
+  "pytest>=8.0,<9.0",
+  "ruff>=0.6,<1.0",
+  "mypy>=1.10,<2.0",
+  "types-PyYAML>=6.0.12",
+  "types-requests>=2.32.0",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
 [project.scripts]
 research-draw = "src.main:main"
 
@@ -92,10 +104,11 @@ version = {attr = "src.version.__version__"}
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+pythonpath = ["."]
 addopts = "-q"
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py313"
 line-length = 120
 exclude = [
   "data",
@@ -109,7 +122,7 @@ select = ["E", "F"]
 ignore = ["E402", "E501"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.13"
 pretty = true
 show_error_codes = true
 warn_unused_configs = true

@@ -1,7 +1,11 @@
+# Legacy pip compatibility file.
+# Canonical environment configuration is pyproject.toml + uv.lock; prefer `uv sync`.
+
 # Base runtime
 numpy>=1.23,<3.0
 matplotlib>=3.7,<4.0
 python-dotenv>=1.0,<2.0
+pydantic>=2.8,<3.0
 PyYAML>=6.0,<7.0
 
 # Optional: stats
@@ -32,4 +36,4 @@ pytest>=8.0,<9.0
 fastapi>=0.111,<1.0
 uvicorn>=0.30,<1.0
 python-multipart>=0.0.9,<1.0
-scikit-image
+scikit-image>=0.22,<1.0

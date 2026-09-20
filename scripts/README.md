@@ -11,19 +11,19 @@
 
 - `download_basemaps.py`
   - 下载离线底图（Natural Earth + GADM）并可选提取港澳区域
-  - 示例：`python scripts/download_basemaps.py --dir data/geo`
+  - 示例：`uv run python scripts/download_basemaps.py --dir data/geo`
 
 - `generate_test_data.py`
   - 生成中英文统计图测试数据与领域数据
-  - 示例：`python scripts/generate_test_data.py`
+  - 示例：`uv run python scripts/generate_test_data.py`
 
 - `generate_domain_demo_data.py`
   - 轻量生成领域 demo 数据
-  - 示例：`python scripts/generate_domain_demo_data.py`
+  - 示例：`uv run python scripts/generate_domain_demo_data.py`
 
 - `generate_demo_rasters.py`
   - 生成 world/china 演示 GeoTIFF 栅格
-  - 示例：`python scripts/generate_demo_rasters.py --out-dir data`
+  - 示例：`uv run python scripts/generate_demo_rasters.py --out-dir data`
 
 - `smoke_statics_en.py` / `smoke_statics_cn.py`
   - 统计图手工 smoke（英文/中文列名）

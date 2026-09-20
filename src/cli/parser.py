@@ -210,7 +210,7 @@ def _load_config(path: Path) -> Dict[str, Any]:
                     package="PyYAML",
                     feature="YAML 配置文件解析",
                     recommended_extra="all",
-                    fallback_pip="pip install PyYAML",
+                    fallback_pip="uv add PyYAML",
                 )
             ) from e
         return yaml.safe_load(text) or {}
@@ -281,58 +281,58 @@ def print_examples_and_exit() -> None:
 Examples
 ========
 # 1) 演示：箱线图 / 小提琴图 / 散点拟合 / 火山图 / 森林图
-python -m src.main --mode demo --plot box --title "箱线图演示"
-python -m src.main --mode demo --plot violin
-python -m src.main --mode demo --plot scatter --xlabel X --ylabel Y --ci 0.95 --equal
-python -m src.main --mode demo --plot volcano --top-n 10 --fdr 0.1
-python -m src.main --mode demo --plot forest --ref-line 0
+uv run python -m src.main --mode demo --plot box --title "箱线图演示"
+uv run python -m src.main --mode demo --plot violin
+uv run python -m src.main --mode demo --plot scatter --xlabel X --ylabel Y --ci 0.95 --equal
+uv run python -m src.main --mode demo --plot volcano --top-n 10 --fdr 0.1
+uv run python -m src.main --mode demo --plot forest --ref-line 0
 
 # 2) 自定义：箱线图
-python -m src.main --mode custom --plot box \
+uv run python -m src.main --mode custom --plot box \
   --group "Ctrl: 1,2,3,4" --group "A: 1.2,2.3,1.8" --group "B: 0.7,0.8,1.0"
 
 # 3) 文件模式：散点
 data/demo.csv: 列 x,y
-python -m src.main --mode file --plot scatter --file data/demo.csv --x-col x --y-col y --ci 0.9
+uv run python -m src.main --mode file --plot scatter --file data/demo.csv --x-col x --y-col y --ci 0.9
 
 # 3.1) 3D 散点
-python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
-python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
-python -m src.main --mode demo --plot surface3d --title "3D Surface"
-python -m src.main --mode demo --plot wireframe3d --title "3D Wireframe"
-python -m src.main --mode demo --plot contour3d --title "3D Contour"
-python -m src.main --mode demo --plot line3d --title "3D Trajectory"
-python -m src.main --mode demo --plot quiver3d --title "3D Vector Field"
-python -m src.main --mode demo --plot waterfall3d --title "3D Waterfall"
-python -m src.main --mode demo --plot embedding3d --embed-method pca --title "3D Embedding"
-python -m src.main --mode demo --plot mesh3d --title "3D Mesh"
-python -m src.main --mode demo --plot slice3d --title "3D Slices"
-python -m src.main --mode demo --plot isosurface3d --iso-level 0.3 --title "3D Isosurface"
+uv run python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
+uv run python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
+uv run python -m src.main --mode demo --plot surface3d --title "3D Surface"
+uv run python -m src.main --mode demo --plot wireframe3d --title "3D Wireframe"
+uv run python -m src.main --mode demo --plot contour3d --title "3D Contour"
+uv run python -m src.main --mode demo --plot line3d --title "3D Trajectory"
+uv run python -m src.main --mode demo --plot quiver3d --title "3D Vector Field"
+uv run python -m src.main --mode demo --plot waterfall3d --title "3D Waterfall"
+uv run python -m src.main --mode demo --plot embedding3d --embed-method pca --title "3D Embedding"
+uv run python -m src.main --mode demo --plot mesh3d --title "3D Mesh"
+uv run python -m src.main --mode demo --plot slice3d --title "3D Slices"
+uv run python -m src.main --mode demo --plot isosurface3d --iso-level 0.3 --title "3D Isosurface"
 
 # 4) 世界底图 + 高亮 + 标注
-python -m src.main --plot world --title "World" --highlight "China,United States of America" --label-names
+uv run python -m src.main --plot world --title "World" --highlight "China,United States of America" --label-names
 
 # 5) 中国分级着色（省级）
-python -m src.main --plot choropleth_china --file data/china_values.csv --level 1 \
+uv run python -m src.main --plot choropleth_china --file data/china_values.csv --level 1 \
   --key-col NAME_1 --value-col value --on NAME --k 6 --cmap Reds --label-top-n 5
 
 # 6) 栅格叠加（世界底图）
-python -m src.main --plot raster --raster-file data/geo/demo_world.tif --alpha 0.6 --basemap world_admin0
+uv run python -m src.main --plot raster --raster-file data/geo/demo_world.tif --alpha 0.6 --basemap world_admin0
 
 # 7) 点位叠加（中国）
-python -m src.main --plot points --basemap china_l1 --file data/points_cn.csv \
+uv run python -m src.main --plot points --basemap china_l1 --file data/points_cn.csv \
   --lon-col lon --lat-col lat --hue-col category --size-col value --size-range 24,180
 
 # 8) 完整性控制（中国地图）
-python -m src.main --plot china --no-include-hk-mo --taiwan-name 台湾
+uv run python -m src.main --plot china --no-include-hk-mo --taiwan-name 台湾
 
 # 9) 领域图示例
-python -m src.main --mode file --plot ma --file data/biomed/ma.csv --title "MA Plot"
-python -m src.main --mode file --plot km --file data/clinical/km.csv --title "Kaplan-Meier"
-python -m src.main --mode file --plot xrd --file data/materials/xrd.csv --title "XRD"
-python -m src.main --mode file --plot spectral_signature --file data/remote/spectral_signature.csv --title "Spectral"
-python -m src.main --mode file --plot candlestick --file data/finance/candlestick.csv --title "Candlestick"
-python -m src.main --mode file --plot likert --file data/psych/likert.csv --title "Likert"
+uv run python -m src.main --mode file --plot ma --file data/biomed/ma.csv --title "MA Plot"
+uv run python -m src.main --mode file --plot km --file data/clinical/km.csv --title "Kaplan-Meier"
+uv run python -m src.main --mode file --plot xrd --file data/materials/xrd.csv --title "XRD"
+uv run python -m src.main --mode file --plot spectral_signature --file data/remote/spectral_signature.csv --title "Spectral"
+uv run python -m src.main --mode file --plot candlestick --file data/finance/candlestick.csv --title "Candlestick"
+uv run python -m src.main --mode file --plot likert --file data/psych/likert.csv --title "Likert"
 """
     )
     sys.exit(0)

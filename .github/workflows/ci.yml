@@ -12,25 +12,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.11"
+          enable-cache: true
 
-      - name: Install backend dependencies
-        run: python -m pip install -e ".[test]"
+      - name: Install Python 3.13.15
+        run: uv python install 3.13.15
+
+      - name: Sync backend dependencies
+        run: uv sync --locked --extra test
 
       - name: Ruff
-        run: python -m ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
+        run: uv run ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
 
       - name: Mypy
-        run: python -m mypy
+        run: uv run mypy
 
       - name: Pytest
         env:
           MPLBACKEND: Agg
           PLOT_BACKEND: Agg
           HEADLESS: "1"
-        run: python -m pytest
+        run: uv run pytest
 
   frontend-quality:
     name: Frontend Lint/Test/Build
@@ -68,12 +71,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.11"
+          enable-cache: true
 
-      - name: Install backend dependencies
-        run: python -m pip install -e ".[test]"
+      - name: Install Python 3.13.15
+        run: uv python install 3.13.15
+
+      - name: Sync backend dependencies
+        run: uv sync --locked --extra test
 
       - name: Render a smoke figure
         env:
@@ -81,5 +87,5 @@ jobs:
           PLOT_BACKEND: Agg
           HEADLESS: "1"
         run: |
-          python -m src.main --mode demo --plot box --no-show --outdir /tmp/research-draw-smoke --save-name ci_smoke
+          uv run python -m src.main --mode demo --plot box --no-show --outdir /tmp/research-draw-smoke --save-name ci_smoke
           test -f /tmp/research-draw-smoke/ci_smoke.png

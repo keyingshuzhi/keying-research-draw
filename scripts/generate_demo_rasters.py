@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 更“专业 & 酷炫”的演示栅格生成脚本（COG-like 写出、fBm 程序化地形）
-# 依赖：pip install rasterio numpy
+# 依赖：uv sync --extra raster
 from __future__ import annotations
 from pathlib import Path
 import argparse
@@ -11,7 +11,7 @@ try:
     from rasterio.transform import from_bounds
     from rasterio.enums import Resampling
 except Exception as e:
-    raise SystemExit("需要 rasterio：请先 `pip install rasterio`") from e
+    raise SystemExit("需要 rasterio：请先执行 `uv sync --extra raster`") from e
 
 
 # -----------------------------

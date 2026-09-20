@@ -4,16 +4,18 @@ Research Draw 是一个面向科研场景的可视化工具站，提供从数据
 
 包含：
 
-- Python CLI（`python -m src.main` / `research-draw`）
+- Python CLI（`uv run python -m src.main` / `uv run research-draw`）
 - Web 端（FastAPI + Vue3）
 
-> 当前版本：`v0.1.1`
+> 当前版本：`v0.1.2`
+
+项目环境已统一使用 `uv` 管理，Python 版本固定为 `3.13.15`。依赖声明以 `pyproject.toml` 为准，解析结果锁定在 `uv.lock`。
 
 当前版本覆盖统计二维图、领域二维图、科研常用三维图、离线地图绘图，并支持文件上传、页面表格录入、历史记录与本地渲染文件管理。
 
 版本管理已统一到单一来源：
 
-- 根目录 `VERSION` 为唯一版本源（当前 `0.1.1`）
+- 根目录 `VERSION` 为唯一版本源（当前 `0.1.2`）
 - CLI / Web 后端通过 `src/version.py` 自动读取
 - 前端 `package.json` / `package-lock.json` 在 `npm` 脚本前自动执行 `sync:version` 注入
 
@@ -44,59 +46,61 @@ English version for GitHub `Description`:
 - 三维图：`scatter3d` / `surface3d` / `wireframe3d` / `contour3d` / `line3d` / `isosurface3d` / `slice3d` / `quiver3d` / `waterfall3d` / `embedding3d` / `mesh3d`
 - 地图：`world` / `world_admin1` / `china` / `choropleth_world` / `choropleth_china` / `raster` / `points`
 
-## 安装
+## 环境与安装
 
-推荐 Python `3.10+`。
+项目固定使用 Python `3.13.15`，推荐先安装 [uv](https://docs.astral.sh/uv/)。项目根目录的 `.python-version` 会被 uv 自动识别。
 
-基础安装：
+同步基础环境：
 
 ```bash
-python -m pip install -e .
+uv sync
 ```
 
 按需安装扩展：
 
 ```bash
 # 文件读取（CSV/Excel）
-python -m pip install -e ".[data]"
+uv sync --extra data
 
 # 统计增强
-python -m pip install -e ".[stats]"
+uv sync --extra stats
 
 # 机器学习/高级图型（含 isosurface3d 依赖 scikit-image）
-python -m pip install -e ".[ml]"
+uv sync --extra ml
 
 # 地图与栅格
-python -m pip install -e ".[maps,raster]"
+uv sync --extra maps --extra raster
 
 # Web 后端
-python -m pip install -e ".[web]"
+uv sync --extra web
 
 # 全量依赖
-python -m pip install -e ".[all]"
+uv sync --extra all
 ```
+
+`uv.lock` 是可复现安装的锁定文件；日常运行、测试和质量检查统一通过 `uv run` 执行。
 
 ## CLI 快速开始
 
-建议使用 `python -m src.main` 或 `research-draw` 启动，不使用 `python src/main.py` 这类脚本路径启动方式。
+建议使用 `uv run python -m src.main` 或 `uv run research-draw` 启动，不使用脚本路径启动方式。
 
 ```bash
 # 查看帮助与示例
-python -m src.main -h
-python -m src.main --help-examples
+uv run python -m src.main -h
+uv run python -m src.main --help-examples
 
 # Demo
-python -m src.main --mode demo --plot box --title "箱线图演示"
-python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
-python -m src.main --mode demo --plot confusion --title "Confusion Matrix"
+uv run python -m src.main --mode demo --plot box --title "箱线图演示"
+uv run python -m src.main --mode demo --plot scatter3d --title "3D Scatter"
+uv run python -m src.main --mode demo --plot confusion --title "Confusion Matrix"
 
 # 文件模式
-python -m src.main --mode file --plot scatter --file data/demo_scatter.csv --x-col x --y-col y
-python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
+uv run python -m src.main --mode file --plot scatter --file data/demo_scatter.csv --x-col x --y-col y
+uv run python -m src.main --mode file --plot scatter3d --file data/demo_scatter3d.csv --x-col x --y-col y --z-col z
 
 # 地图
-python -m src.main --plot choropleth_world --file data/world_choropleth.csv --key-col ISO_A3 --value-col value --on iso_a3
-python -m src.main --plot points --basemap china_l1 --file data/points_cn.csv --lon-col lon --lat-col lat
+uv run python -m src.main --plot choropleth_world --file data/world_choropleth.csv --key-col ISO_A3 --value-col value --on iso_a3
+uv run python -m src.main --plot points --basemap china_l1 --file data/points_cn.csv --lon-col lon --lat-col lat
 ```
 
 也可通过入口命令运行：
@@ -112,8 +116,8 @@ research-draw --help
 建议统一用 `uvicorn web.backend.app:app` 这种包路径启动方式，避免运行时路径差异。
 
 ```bash
-python -m pip install -e ".[web,data,ml,maps,raster]"
-python -m uvicorn web.backend.app:app --reload --host 127.0.0.1 --port 8000
+uv sync --extra web --extra data --extra ml --extra maps --extra raster
+uv run uvicorn web.backend.app:app --reload --host 127.0.0.1 --port 8000
 ```
 
 前端：
@@ -142,10 +146,10 @@ Web 端已支持：
 ## 工程质量检查
 
 ```bash
-python3 -m pip install -e ".[test]"
-python3 -m ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
-python3 -m mypy
-python3 -m pytest -q
+uv sync --extra test
+uv run ruff check src/main.py src/cli/parser.py src/cli/config_schema.py src/version.py web/backend/app.py tests/test_cli_parser.py tests/test_loaders.py tests/test_smoke_app.py
+uv run mypy
+uv run pytest -q
 
 cd web/frontend
 npm install

@@ -36,7 +36,7 @@ import numpy as np
 
 try:
     import geopandas as gpd
-    from shapely.geometry import LineString
+    from shapely.geometry import LineString, MultiLineString, Point
     from shapely.ops import unary_union
 except Exception as e:
     from src.util.dependency_hints import format_missing_dependency
@@ -46,7 +46,7 @@ except Exception as e:
             package="geopandas",
             feature="GeoAtlas 地图功能",
             recommended_extra="maps",
-            fallback_pip="pip install geopandas shapely",
+            fallback_pip="uv add geopandas shapely",
         )
     ) from e
 
